@@ -1,0 +1,38 @@
+<div class="street-filter-wrapper">
+  <label>Find your street</label>
+  <input class="street-filter" type="text" #filter>
+  <button class="primary street-filter-button" type="button" (click)="filterStreet(filter.value)">Search</button>
+</div>
+<div class="group-select-wrapper">
+  <label>Select your group</label>
+  <ng-select class="group-select" [(ngModel)]="selectedGroupValue" (change)="groupSelected()">
+    @for (group of groupsList; track group.id) {
+    <ng-option [value]="group.id">{{group.name}}</ng-option>
+    }
+  </ng-select>
+</div>
+<div class="schedule-table-wrapper">
+  <table class="schedule-table">
+    <thead>
+      <tr class="table-header-row">
+        <th> </th>
+        <th *ngFor="let interval of intervalList">{{ interval.startTime | slice:0:2 }} - {{ interval.endTime | slice:0:2 }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let dayInterval of dayIntervalList">
+        <td>{{ dayInterval.day }}</td>
+        <td *ngFor="let interval of dayInterval.intervals" (click)="selectInterval(dayInterval.day, interval, interval.isActive)" [ngClass]="{'active-blackout': interval.isActive, 'cursor-pointer': selectedGroupValue}"></td>
+      </tr>
+  </table>
+</div>
+<div class="buttons-wrapper">
+  <div class="file-upload">
+    <input type="file" [accept]="'.xlsx'" (change)="onFileSelected($event)" />
+    <button [disabled]="!fileName" (click)="saveScheduleFromFile()">Import file</button>
+  </div>
+
+  <button [hidden]="!isDataChanged||!selectedGroupValue" (click)="saveChanges()">Save changes</button>
+  <button [hidden]="!selectedGroupValue" (click)="saveToJson()">Save As Json</button>
+</div>
+

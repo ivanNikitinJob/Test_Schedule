@@ -1,0 +1,6 @@
+@BlackoutSchedule.Server_HostAddress = http://localhost:5051
+
+GET {{BlackoutSchedule.Server_HostAddress}}/interval/
+Accept: application/json
+
+###
